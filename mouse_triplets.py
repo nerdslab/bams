@@ -332,7 +332,7 @@ def main():
         help="select task",
     )
     parser.add_argument("--data_root", type=str, default="./data/mabe")
-    parser.add_argument("--cache_path", type=str, default="./data/mabe/mice_triplet")
+    parser.add_argument("--cache_path", type=str, default="./data/mabe/mouse_triplet")
     parser.add_argument("--hoa_bins", type=int, default=32)
     parser.add_argument("--batch_size", type=int, default=32)
     parser.add_argument("--num_workers", type=int, default=16)

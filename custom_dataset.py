@@ -12,7 +12,7 @@ from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
 
-from bams.data import Dataset
+from bams.data import KeypointsDataset
 from bams.models import BAMS
 from bams import HoALoss
 
@@ -110,7 +110,7 @@ def main():
     # dataset
     keypoints = load_data(args.data_root)
 
-    dataset = Dataset(
+    dataset = KeypointsDataset(
         keypoints=keypoints, hoa_bins=args.hoa_bins, cache_path=args.cache_path
     )
     print("Number of sequences:", len(dataset))

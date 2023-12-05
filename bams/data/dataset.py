@@ -59,7 +59,7 @@ class Dataset(CachedDataset):
         )
         quantized_target_feats = np.zeros_like(self.target_feats, dtype=np.uint8)
 
-        # pre-compute histogram of actions
+        # pre-compute histogram of actions for target features
         num_feats = self.target_feats.shape[2]
         for i in tqdm(range(num_feats)):
             # find the range of values (low, high) for each feature
@@ -75,11 +75,15 @@ class Dataset(CachedDataset):
             ).astype(np.uint8)
 
             # normalize
-            self.input_feats[..., i] = self.input_feats[..., i] / np.nanmax(
-                np.abs(self.input_feats[..., i])
-            )
             self.target_feats[..., i] = self.target_feats[..., i] / np.max(
                 [np.abs(low), np.abs(high)]
+            )
+
+        # normalize input features
+        for i in range(self.input_feats.shape[2]):
+            # z-score
+            self.input_feats[..., i] = self.input_feats[..., i] / np.nanmax(
+                np.abs(self.input_feats[..., i])
             )
 
         data = dict(
