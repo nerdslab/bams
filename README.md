@@ -2,9 +2,17 @@
 
 ![Architecture Overview](overview.png)
 
-This is the official PyTorch implementation of BAMS in 'Relax, it doesn't matter how you get there: A new self-supervised approach for multi-timescale behavior analysis' (NeurIPS 2023).
+This is the official PyTorch implementation of BAMS in 'Relax, it doesn't matter how you 
+get there: A new self-supervised approach for multi-timescale behavior analysis' 
+(NeurIPS 2023).
 
-The main scripts are `mouse_triplets.py` and `fruit_flies.py`` used for training on the MABe datasets.
+This repo contains examples of training BAMS on the Multi Agent Behavior Challenge (MABe) 
+datasets, which are benchmark datasets that provide a rich set of labels to evaluate the 
+quality of the learned representations. The main scripts for these datasets will be 
+`mouse_triplets.py` and `fruit_flies.py`.
+
+BAMS is a general purpose self-supervised learning method for behavior analysis, and does
+not require labels. To train BAMS on your own dataset, please refer to `custom_dataset.py`.
 
 ### Setup
 
@@ -23,12 +31,15 @@ pip install -e .
 
 ### Downloading the MABe data
 
+The [MABe 2022](https://sites.google.com/view/computational-behavior/our-datasets/mabe2022-dataset)
+trajectory is publically available.
 Run the following script to download the MABe data (both mouse triplet and fruit fly datasets):
 ```bash
 bash download_mabe.sh
 ```
 
 ## Mouse Triplet experiments
+
 
 To start training, run:
 ```bash
@@ -48,10 +59,13 @@ python3 mouse_triplets.py --job compute_representations --ckpt_path ./bams-mouse
 For linear evaluation of the learned representations, we will use the public
 MABe evaluator:
 ```bash
+cd mabe-2022-public-evaluator/
 python3 round1_evaluator.py --task mouse --submission ../bams-mouse-triplet-2023-11-30-17-49-59_submission.npy --labels ../data/mabe/mouse_triplets_test_labels.npy
 ```
 
 ## Custom datasets
 
 To train BAMS on a custom dataset, refer to `custom_dataset.py`, you will need to
-simply load your `keypoints` object which should be of shape `(n_samples, seq_len, num_feats)`. If you have missing values, or need to pad your data to the same length, please use `np.nan` as the missing value.
+simply load your `keypoints` object which should be of shape `(n_samples, seq_len, num_feats)`. 
+If you have missing values, or need to pad your data to the same length, please use `np.nan`
+as the missing value.
