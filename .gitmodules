@@ -1,0 +1,3 @@
+[submodule "mabe-2022-public-evaluator"]
+	path = mabe-2022-public-evaluator
+	url = https://github.com/damaggu/MABe2022.git
