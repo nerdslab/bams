@@ -29,7 +29,10 @@ pip install --upgrade pip
 pip install -e .
 ```
 
-### Downloading the MABe data
+## Mouse Triplet experiments
+To see an example of training and evaluating BAMS end-to-end, please follow the steps below to test BAMS on the Mabe mouse triplets challenge.
+
+### 1. Downloading the MABe data
 
 The [MABe 2022](https://sites.google.com/view/computational-behavior/our-datasets/mabe2022-dataset)
 trajectory is publically available.
@@ -37,10 +40,7 @@ Run the following script to download the MABe data (both mouse triplet and fruit
 ```bash
 bash download_mabe.sh
 ```
-
-## Mouse Triplet experiments
-
-
+### 2. Model training
 To start training, run:
 ```bash
 python3 mouse_triplets.py --job train
@@ -55,7 +55,7 @@ To compute the learned representations and save them to a file, run:
 ```bash
 python3 mouse_triplets.py --job compute_representations --ckpt_path ./bams-mouse-triplet-2023-12-04-14-42-44.pt
 ```
-
+### 3. Linear evaluation 
 For linear evaluation of the learned representations, we will use the public
 MABe evaluator:
 ```bash
@@ -64,8 +64,17 @@ python3 round1_evaluator.py --task mouse --submission ../bams-mouse-triplet-2023
 ```
 
 ## Custom datasets
+If you'd like to test BAMS on your own dataset, please use `custom_dataset.py`. 
 
-To train BAMS on a custom dataset, refer to `custom_dataset.py`, you will need to
-simply load your `keypoints` object which should be of shape `(n_samples, seq_len, num_feats)`. 
-If you have missing values, or need to pad your data to the same length, please use `np.nan`
+### 1. Model training
+To train a model, you will need to simply load your `keypoints` object which should be of shape `(n_samples, seq_len, num_feats)`. 
+
+**Note:**  If you have missing values, or need to pad your data to the same length, please use `np.nan`
 as the missing value.
+
+### 2. Extract the embeddings
+
+```
+embs, hoa_pred, byol_preds = model(input)
+```
+embs is a dict with embs['short_term'] and embs['long_term'] containing both the short-term and long-term latent embeddings
