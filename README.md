@@ -14,6 +14,8 @@ quality of the learned representations. The main scripts for these datasets will
 BAMS is a general purpose self-supervised learning method for behavior analysis, and does
 not require labels. To train BAMS on your own dataset, please refer to `custom_dataset.py`.
 
+Data and scripts for the Simulated Quadrupeds Dataset can be found here: https://github.com/nerdslab/bams_simulated_quadrupeds
+
 ### Setup
 
 Clone this repository:

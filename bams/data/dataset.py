@@ -8,18 +8,19 @@ from . import CachedDataset, diff
 
 
 class Dataset(CachedDataset):
-    r"""Base class for all datasets.
+    r"""Dataset for holding time series data, with input and target features.
 
     Args:
-        root (str): Root directory of dataset.
-        keypoints (np.ndarray): Array of shape (num_sequences, sequence_len,
-            num_feats). Use np.nan for missing values or padding frames.
-        annotations (dict(str, np.ndarray)): Dictionary of annotations, where each
-            value is an array of shape (num_sequences, sequence_len).
-        name (str): Name of the dataset.
+        input_feats (np.ndarray): Array of shape (num_sequences, sequence_len, num_feats).
+            Use np.nan for missing values or padding frames.
+        target_feats (np.ndarray): Array of shape (num_sequences, sequence_len, num_feats).
+            Use np.nan for missing values or padding frames.
+        ignore_frames (np.ndarray): Array of shape (num_sequences, sequence_len).
+            Use True for missing values or padding frames.
         hoa_bins (int): Number of bins for the histograms of actions.
         hoa_window (int): Window size for the histograms of actions.
-        force_process (bool): Whether to force process the dataset.
+        cache_path (str): Path to the cache file.
+        cache (bool): Whether to use the cache file.
     """
 
     def __init__(
@@ -136,18 +137,19 @@ class Dataset(CachedDataset):
 
 
 class KeypointsDataset(Dataset):
-    r"""Base class for all datasets.
+    r"""Simplified dataset for cases where the data is keypoints only (usually obtained
+    using vision-based pose estimation and tracking methods). 
+        
+    The state is defined by the keypoints while the action will be computed as the 
+    difference between consecutive keypoints.
 
     Args:
-        root (str): Root directory of dataset.
         keypoints (np.ndarray): Array of shape (num_sequences, sequence_len,
             num_feats). Use np.nan for missing values or padding frames.
-        annotations (dict(str, np.ndarray)): Dictionary of annotations, where each
-            value is an array of shape (num_sequences, sequence_len).
-        name (str): Name of the dataset.
         hoa_bins (int): Number of bins for the histograms of actions.
         hoa_window (int): Window size for the histograms of actions.
-        force_process (bool): Whether to force process the dataset.
+        cache_path (str): Path to the cache file.
+        cache (bool): Whether to use the cache file.
     """
 
     def __init__(
