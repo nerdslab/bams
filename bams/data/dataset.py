@@ -174,6 +174,6 @@ class KeypointsDataset(Dataset):
         states = keypoints
         actions = diff(states, axis=1, h=1, padding="edge")
 
-        input_feats = np.stack([states, actions], axis=-1)
+        input_feats = np.concatenate([states, actions], axis=-1)
         target_feats = actions
         return input_feats, target_feats, ignore_frames
