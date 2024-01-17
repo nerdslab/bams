@@ -111,7 +111,10 @@ def main():
     keypoints = load_data(args.data_root)
 
     dataset = KeypointsDataset(
-        keypoints=keypoints, hoa_bins=args.hoa_bins, cache_path=args.cache_path
+        keypoints=keypoints,
+        hoa_bins=args.hoa_bins,
+        cache_path=args.cache_path,
+        cache=False,
     )
     print("Number of sequences:", len(dataset))
 

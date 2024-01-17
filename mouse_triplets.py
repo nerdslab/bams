@@ -251,7 +251,9 @@ def mouse_feature_extractor(keypoints, noise_thresh=3e-3):
 #################
 # Training loop #
 #################
-def train_loop(model, device, loader, optimizer, criterion, writer, step, log_every_step):
+def train_loop(
+    model, device, loader, optimizer, criterion, writer, step, log_every_step
+):
     model.train()
 
     for data in tqdm(loader, position=1, leave=False):
@@ -366,6 +368,7 @@ def train(args):
         target_feats=target_feats,
         ignore_frames=ignore_frames,
         cache_path=args.cache_path,
+        cache=True,
         hoa_bins=args.hoa_bins,
         hoa_window=30,
     )
@@ -463,7 +466,7 @@ def compute_representations(args):
 
     if args.ckpt_path is None:
         raise ValueError("Please specify a checkpoint path")
-    
+
     # load checkpoint
     model.load_state_dict(torch.load(args.ckpt_path, map_location=device))
     model.eval()

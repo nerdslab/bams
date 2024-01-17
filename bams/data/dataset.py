@@ -10,6 +10,12 @@ from . import CachedDataset, diff
 class Dataset(CachedDataset):
     r"""Dataset for holding time series data, with input and target features.
 
+    Caching is possible if you need to avoid processing the data every time you run
+    the script. The cache file will be saved in `cache_path` and will be loaded if
+    `cache` is set to True. Be careful when using the cache, as it will not be updated
+    if the data changes. Only use once the data processing pipeline is finalized. 
+    Deleteing the cache file will force the data to be processed again.
+
     Args:
         input_feats (np.ndarray): Array of shape (num_sequences, sequence_len, num_feats).
             Use np.nan for missing values or padding frames.
@@ -32,7 +38,7 @@ class Dataset(CachedDataset):
         hoa_bins=32,
         hoa_window=30,
         cache_path=None,
-        cache=True,
+        cache=False,
     ):
         self.input_feats = input_feats
         self.target_feats = target_feats
@@ -142,6 +148,13 @@ class KeypointsDataset(Dataset):
         
     The state is defined by the keypoints while the action will be computed as the 
     difference between consecutive keypoints.
+
+    Caching is possible if you need to avoid processing the data every time you run
+    the script. The cache file will be saved in `cache_path` and will be loaded if
+    `cache` is set to True. Be careful when using the cache, as it will not be updated
+    if the data changes. Only use once the data processing pipeline is finalized. 
+    Deleteing the cache file will force the data to be processed again.
+
 
     Args:
         keypoints (np.ndarray): Array of shape (num_sequences, sequence_len,
