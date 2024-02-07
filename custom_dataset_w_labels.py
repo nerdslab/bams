@@ -23,7 +23,8 @@ from bams import HoALoss, compute_representations, train_linear_classfier, train
 
 def load_data(path):
     '''
-    load and format keypoints into numpy array from raw data
+    Load and format keypoint data. Output should be in the shape (n_samples, seq_len, num_feats). 
+    Collapse xy coordinates into the single num_feats dimension.
     '''
     try:
         data = np.load(os.path.join(path, 'mouse_data.npy'), allow_pickle=True).item()
@@ -60,7 +61,22 @@ def load_data(path):
     return keypoints
 
 def load_annotations(path):
-    #!!specify format of annotations
+    '''
+    load labels/annotations in the following dictionary format:
+    annotations = {'video_name': [str], 'label1': [int/float], 'label2': [int/float], ...}
+    
+    Your labels can have any name. The video_name key is optional, and is used to keep track of the video name for each sample.
+
+    In addition, create an eval_utils dictionary with the following format:
+    eval_utils = {'classification_tags': [str], 'regression_tags': [str], 'sequence_level_dict': {'label1': True/False, 'label2': True/False, ...}}
+
+    This dictionary contains the necessary metadata for evaluating the model. The classification_tags list contains the names of all
+    classification labels, the regression_tags list contains the names of all regression labels, and the sequence_level_dict contains
+    the names of all labels and whether they are sequence level or not. Enter True if the label is a sequence level label, and False 
+    if it is frame level. Ensure the label names in the classification_tags and regression_tags lists match the names of the labels in
+    the annotations dictionary.
+    '''
+
     annotations = np.load(os.path.join(path, 'annotations.npy'), allow_pickle=True).item()
 
     sequence_level_dict = annotations.pop('sequence_level')
@@ -215,7 +231,6 @@ def main():
 
     # dataset
     keypoints = load_data(args.data_root)
-    keypoints = keypoints[:50, :, :]
 
     # specify save format of annotations
     annotations, eval_utils = load_annotations(args.data_root)
