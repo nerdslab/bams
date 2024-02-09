@@ -65,8 +65,8 @@ cd mabe-2022-public-evaluator/
 python3 round1_evaluator.py --task mouse --submission ../bams-mouse-triplet-2023-11-30-17-49-59_submission.npy --labels ../data/mabe/mouse_triplets_test_labels.npy
 ```
 
-## Custom datasets
-If you'd like to test BAMS on your own dataset, please use `custom_dataset.py`. 
+## Custom datasets without annotations
+If you'd like to train BAMS on your own dataset without behavioral readouts, please use `custom_dataset.py`.
 
 ### 1. Model training
 To train a model, you will need to simply load your `keypoints` object which should be of shape `(n_samples, seq_len, num_feats)`. 
@@ -80,3 +80,28 @@ as the missing value.
 embs, hoa_pred, byol_preds = model(input)
 ```
 embs is a dict with embs['short_term'] and embs['long_term'] containing both the short-term and long-term latent embeddings
+
+## Custom datasets with annotations
+If you'd like to train BAMS on your own dataset and predict behavioral readouts across multiple timescales (classification or regression),
+please use `custom_dataset_w_labels.py`.
+
+### 1. Model training and linear evaluation
+To train a model, you will need to load your `keypoints` object which should be of shape `(n_samples, seq_len, num_feats)`. 
+
+**Note:**  If you have missing values, or need to pad your data to the same length, please use `np.nan`
+as the missing value.
+
+Next, you must load in your annotations/labels. BAMS supports linear readouts of behavior for both **frame-level** (labeled per frame) and **sequence-level** (labeled per sequence) labels. Your annotations should be loaded in a specific dictionary format, specified in `custom_dataset_w_labels.py`. You must specify whether each label should be classified or regressed and is frame or sequence-level in the 
+given format.
+
+This script will automatically fit a linear classifier or regressor to each label, either per sequence or per frame depending on the timescale of the labels. Confusion matrices and regression loss will be directly saved to tensorboard.
+
+### 2. Extract the embeddings
+
+```
+embs, hoa_pred, byol_preds = model(input)
+```
+embs is a dict with embs['short_term'] and embs['long_term'] containing both the short-term and long-term latent embeddings
+
+## Visualizing latent embeddings for interpretability
+We have included an example notebook, `visualize_latents.ipynb`, which illustrates how you can visualize BAMS embeddings using PCA to gain further insight into your data.

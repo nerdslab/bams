@@ -39,6 +39,8 @@ class Dataset(CachedDataset):
         hoa_window=30,
         cache_path=None,
         cache=False,
+        annotations=None,
+        **kwargs,
     ):
         self.input_feats = input_feats
         self.target_feats = target_feats
@@ -52,6 +54,10 @@ class Dataset(CachedDataset):
         self.hoa_window = hoa_window
         cache_path = "./data/tmp" if cache_path is None else cache_path
         cache_path = cache_path + f"_bins{self.hoa_bins}.pkl"
+
+        self.annotations = annotations
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
         super().__init__(cache_path, cache)
 
@@ -128,6 +134,9 @@ class Dataset(CachedDataset):
             ignore_frames=self.ignore_frames[item],
             ignore_weights=weights,
         )
+        if self.annotations is not None:
+            for key in self.annotations:
+                data[key] = self.annotations[key][item]
         return data
 
     def __len__(self):
