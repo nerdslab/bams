@@ -2,13 +2,14 @@ import torch
 from torch.utils.data import DataLoader
 import numpy as np
 from collections import defaultdict
+from tqdm import tqdm
 
 def compute_representations(model, dataset, device, batch_size=4):
     model.eval()
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
 
     embs_dict = defaultdict(list)
-    for data in loader:
+    for data in tqdm(loader):
         x = data['input'].float().to(device)
 
         with torch.no_grad():

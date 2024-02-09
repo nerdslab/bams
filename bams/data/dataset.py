@@ -134,9 +134,9 @@ class Dataset(CachedDataset):
             ignore_frames=self.ignore_frames[item],
             ignore_weights=weights,
         )
-
-        for key in self.annotations:
-            data[key] = self.annotations[key][item]
+        if self.annotations is not None:
+            for key in self.annotations:
+                data[key] = self.annotations[key][item]
         return data
 
     def __len__(self):
